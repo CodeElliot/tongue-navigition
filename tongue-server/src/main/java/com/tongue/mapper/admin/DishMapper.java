@@ -13,6 +13,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 
 import java.util.List;
+import java.util.Map;
 
 @Mapper
 public interface DishMapper {
@@ -39,4 +40,12 @@ public interface DishMapper {
     List<Flavor> getFlavors();
     @Select("select * from category")
     List<Category> getCategories();
+    //查询菜品增量
+    Integer getNewDishStatistic(Map map);
+
+    Integer getNewUserStatistic(Map map);
+    @Select("select count(id) from dish where flavor_id=#{id}")
+    Long countByFlavor(Integer id);
+    @Select("select count(id) from dish where category_id=#{id}")
+    Long countByCategory(Integer id);
 }

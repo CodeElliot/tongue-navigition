@@ -49,4 +49,26 @@
         </where>
         order by d.create_time
     </select>
+    <select id="getNewDishStatistic" resultType="java.lang.Integer">
+        select count(id) from dish
+        <where>
+            <if test="begin!=null">
+                create_time &gt; #{begin}
+            </if>
+            <if test="end!=null">
+              and  create_time &lt; #{end}
+            </if>
+        </where>
+    </select>
+    <select id="getNewUserStatistic" resultType="java.lang.Integer">
+        select count(id) from user
+        <where>
+            <if test="begin!=null">
+                create_time &gt; #{begin}
+            </if>
+            <if test="end!=null">
+                and  create_time &lt; #{end}
+            </if>
+        </where>
+    </select>
 </mapper>
