@@ -1,0 +1,34 @@
+tongue:
+  jwt:
+    adminSecretKey: itgod
+    #    过期时间30分钟
+    adminTtl: 1800000
+    adminTokenName: token
+    #微信端
+    userSecretKey: itgodforuser
+      #    过期时间30分钟
+    userTtl: 1800000
+    userTokenName: authentication
+  oss:
+    #    设置为自己的配置
+    bucketname: bucket-name
+    endpoint: oss-cn-beijing.aliyuncs.com
+  wechat:
+    appid:xxx
+    secret:xxx
+spring:
+  datasource:
+    username: root
+    password: 123456
+    host: localhost
+    database: tongue_navigation
+    port: 3306
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/tongue_navigation
+  data:
+    redis:
+      host: localhost
+      port: 6379
+#      password: 123456
+server:
+  port: 8080

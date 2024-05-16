@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tongue.mapper.admin.DishMapper">
+
+    <insert id="addDish" useGeneratedKeys="true" keyProperty="id">
+        insert into dish
+        (dname, dimg, category_id, flavor_id, ingredient, step, description, create_time, update_time, create_user,
+         update_user)
+        values (#{dname}, #{dimg}, #{categoryId}, #{flavorId}, #{ingredient}, #{step}, #{description}, #{createTime},
+                #{updateTime}, #{createUser}, #{updateUser})
+    </insert>
+    <update id="update">
+        update dish
+        <set>
+            <if test="dname!=null and dname!=''">dname=#{dname}</if>
+            <if test="dimg!=null and dimg!=''">,dimg=#{dimg}</if>
+            <if test="categoryId!=null and categoryId!=''">, category_id=#{categoryId}</if>
+            <if test="flavorId!=null and flavorId!=''">,flavor_id=#{flavorId}</if>
+            <if test="step!=null and step!=''">,step=#{step}</if>
+            <if test="ingredient!=null and ingredient!=''">,ingredient=#{ingredient}</if>
+            <if test="description!=null and description!=''">,description=#{description}</if>
+            <if test="updateTime!=null">,update_time=#{updateTime}</if>
+            <if test="updateUser!=null">,update_user=#{updateUser}</if>
+        </set>
+        where id=#{id}
+    </update>
+
+    <select id="list" resultType="com.tongue.vo.DishVO">
+        select d.*,c.cname,f.fname,e.ename as createName from dish d
+        left outer join category c on c.id = d.category_id
+        left outer join flavor f on f.id = d.flavor_id
+        left outer join employee e on e.id=d.create_user
+        <where>
+            <if test="ingredientList!=null">
+                <foreach collection="ingredientList" item="ingre" open="(" close=")" separator="and">
+                    d.ingredient like concat('%',#{ingre},'%')
+                </foreach>
+            </if>
+            <if test="dname!=null and dname!=''">
+                and d.dname like concat('%',#{dname},'%')
+            </if>
+            <if test="categoryId!=null and categoryId!=''">
+                and d.category_id=#{categoryId}
+            </if>
+            <if test="flavorId!=null and flavorId!=''">
+                and d.flavor_id=#{flavorId}
+            </if>
+            <if test="openid!=null and openid!=''">
+                and d.create_user=#{openid}
+            </if>
+        </where>
+        order by d.create_time
+    </select>
+    <select id="getNewDishStatistic" resultType="java.lang.Integer">
+        select count(id) from dish
+        <where>
+            <if test="begin!=null">
+                create_time &gt; #{begin}
+            </if>
+            <if test="end!=null">
+              and  create_time &lt; #{end}
+            </if>
+        </where>
+    </select>
+    <select id="getNewUserStatistic" resultType="java.lang.Integer">
+        select count(id) from user
+        <where>
+            <if test="begin!=null">
+                create_time &gt; #{begin}
+            </if>
+            <if test="end!=null">
+                and  create_time &lt; #{end}
+            </if>
+        </where>
+    </select>
+</mapper>
